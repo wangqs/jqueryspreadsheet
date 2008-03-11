@@ -316,7 +316,7 @@
         {
             var range = $.fn.to_b26($s.startx+1) + "" + ($s.starty+1);
     
-            if($s.startx != $s.endx && $s.starty != $s.endy)
+            if($s.startx != $s.endx || $s.starty != $s.endy)
                 range += ":"+$.fn.to_b26($s.endx+1)+""+($s.endy+1);
     
             root.find("#name").val(range);
