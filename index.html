@@ -11,14 +11,40 @@
         <script src="jquery.spreadsheet.js" language="javascript"></script>
 
         <style type="text/css">
+        
             @import "jquery.spreadsheet.css";
+            
             body { overflow:hidden; }
-            * 
-            { 
-                font:   11px "Helvetica Neue", Palatino, sans-serif; 
-                margin: 0px; 
-                padding:0px; 
-            }
+
+            * { 
+                margin:         0px;
+                padding:        0px;
+                font:           11px sans-serif;            }
+    
+            ul { 
+                margin-left:    30px;                       }
+
+            h1 { 
+                font:           24px sans-serif;            }
+
+            h2 {
+                margin-top:     30px;
+                font:           bold 16px sans-serif;       }              
+
+            hr { 
+                margin-bottom:  4px;                        }
+
+            p {
+                margin:         10px 0px;                   }
+
+            #container { 
+                padding:        20px;
+                background:     #FFF;
+                width:          600px;
+                margin:         0px auto;                  }
+                
+            #hn { height: 300px; }
+
         </style>
 
         <script>
@@ -32,6 +58,28 @@
 
     <body>
 
-    <body><div id="hn"></div></body>
+        <div id="container">
+         
+            <h1>JQuery.Spreadsheet UI</h1>
+            <hr />
+            
+            <h2>Introduction</h2>
+            <p>A plugin to the JQuery library that provides a spreadsheet like
+            user interface</p>
+            
+            <h2>Project</h2>
+            <ul>
+                <li><p>Google Code: <a href="http://code.google.com/p/jqueryspreadsheet/">
+                    http://code.google.com/p/jqueryspreadsheet/</a></p></li>
+            </ul>
+                    
+
+            <h2>Example</h2>
+            <br />
+            <div id="hn" />
+
+        </div>     
+        
+    </body>
 
 </html>
