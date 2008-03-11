@@ -42,15 +42,13 @@
                 background:     #FFF;
                 width:          600px;
                 margin:         0px auto;                  }
-                
-            #hn { height: 300px; }
 
         </style>
 
         <script>
             $(function()
             {
-                $("#hn").spreadsheet();    
+                $("#hn").spreadsheet({fullscreen:true});    
             });
         </script>
 
@@ -74,11 +72,12 @@
                 <li><p>Author: Dale Harvey (harveyd@gmail.com)</p></li>
             </ul>
                     
+
             <h2>Example</h2><br />
             <pre>
 $(function()
 {
-    $("#hn").spreadsheet();    
+    $("#hn").spreadsheet({fullscreen:true});    
 });
             </pre>
             <div id="hn" />
