@@ -15,15 +15,15 @@
         // the callback is called on click and is given info
         // on the current selection                    
         $.fn.toolbar = [
-            {css:"left",    click:function(e,s){ s.range.each(function(i) { set_css(this,"text-align","left"); }); }},
-            {css:"center",  click:function(e,s){ s.range.each(function(i) { set_css(this,"text-align","center"); }); }},
-            {css:"right",   click:function(e,s){ s.range.each(function(i) { set_css(this,"text-align","right"); }); }},
-            {css:"justify", click:function(e,s){ s.range.each(function(i) { set_css(this,"text-align","justify"); }); }},
+            {css:"left",    click:function(e,s){ s.range.each(function() { set_css(this,"text-align","left"); }); }},
+            {css:"center",  click:function(e,s){ s.range.each(function() { set_css(this,"text-align","center"); }); }},
+            {css:"right",   click:function(e,s){ s.range.each(function() { set_css(this,"text-align","right"); }); }},
+            {css:"justify", click:function(e,s){ s.range.each(function() { set_css(this,"text-align","justify"); }); }},
             {css:"separator"},         
-            {css:"bold",    click:function(e,s){ s.range.each(function(i) { toggle_css(this,"font-weight","normal","bold"); }); }},
-            {css:"italic",  click:function(e,s){ s.range.each(function(i) { toggle_css(this,"font-style","normal","italic"); }); }},
-            {css:"underl",  click:function(e,s){ s.range.each(function(i) { toggle_css(this,"text-decoration","none","underline"); }); }},
-            {css:"strike",  click:function(e,s){ s.range.each(function(i) { toggle_css(this,"text-decoration","none","line-through"); }); }},
+            {css:"bold",    click:function(e,s){ s.range.each(function() { toggle_css(this,"font-weight","normal","bold"); }); }},
+            {css:"italic",  click:function(e,s){ s.range.each(function() { toggle_css(this,"font-style","normal","italic"); }); }},
+            {css:"underl",  click:function(e,s){ s.range.each(function() { toggle_css(this,"text-decoration","none","underline"); }); }},
+            {css:"strike",  click:function(e,s){ s.range.each(function() { toggle_css(this,"text-decoration","none","line-through"); }); }},
             {css:"separator"}
         ]; 
         
