@@ -1,0 +1,49 @@
+/**
+ * jQuery.TextBox
+ * Copyright (c) 2008 HyperNumbers.com
+ * All rights reserved.
+ * @projectDescription TextBox
+ * @author Dale Harvey
+ * @version 0.1
+ */
+
+.textbox *
+{
+    padding:    0px;
+    margin:     0px;
+}
+
+.textbox .arrow
+{
+    cursor:     pointer;
+    width:      16px;
+    height:     16px;
+    background: url('../img/arrow_down.png');
+    position:   absolute;
+}
+
+.textbox ul
+{
+    background: #FFF;
+    border:     1px solid #999;
+    position:   absolute;
+    display:    none;
+}
+
+.textbox li
+{
+    width:      100%;
+    list-style-type: none;
+}
+
+.textbox li a
+{
+    cursor:     pointer;
+    display:    block;
+    padding:    3px;
+}
+
+.textbox li a:hover
+{
+    background: #EEE;
+}
