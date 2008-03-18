@@ -25,55 +25,60 @@
         */   
         return this.each(function() 
         {
-            var $this = $(this);
+            var $t   = $(this);
+            var $inp = this;
             
-            var wrapper = $("<div class='textbox' />");
-            $this.wrap(wrapper);
-                
-            var root = $(".textbox");
-            root.width(this.offsetWidth);
+            var top  = $t.offset().top;
+            var left = $t.offset().left;
+            var height = this.offsetHeight;
+            var width  = this.offsetWidth;
             
-            var arrow = $("<div class='arrow' />").prependTo(root);
-            arrow.css("top",(($this.offset().top + (this.offsetHeight / 2)) - 8) + "px");
-            arrow.css("left",(($this.offset().left + this.offsetWidth) - 16) + "px");
+            var root = $t.wrap("<div class='textbox' />").parent();
+            root.width(width);
             
-            var list = $("<ul />").appendTo(root);
-            list.width(this.offsetWidth);
-            list.css("top",($this.offset().top + this.offsetHeight) + "px");
-            
-            list.mousedown(function(e)
+            // The drop down list of items
+            var list = $("<ul />").appendTo(root).width(width
+            ).css("top",(top + height) + "px"
+            ).mousedown(function(e)
             {
                 list.toggle();
-                $this.val($(e.target).text());
+                $t.val($(e.target).text());
                 
                 if(typeof o.onSelect == "function")
                    o.onSelect($(e.target).text());
             });
             
-            $.each(o.items,function(i)
-            {
-                $.fn.textbox.add(root,this);
-            });
-            
-            arrow.mousedown(function()
+            var arrow = $("<div class='arrow' />").prependTo(root
+            ).css("top", ((top  + (height/2)) - 8)+"px"
+            ).css("left",((left + width) - 16)+"px"
+            ).mousedown(function()
             {
                 list.toggle();
             });
             
-            $this.click(function()
+            $(window).resize(function()
+            {
+                arrow.css("left",(($t.offset().left + width) - 16)+"px");    
+            });
+            
+            this.textBoxObj = new Object();
+            this.textBoxObj.add = function(item)
+            {
+                list.append($("<li />").append($("<a>"+item+"</a>")));
+            };
+            
+            $t.click(function()
             {
                 this.select();
-            })
-            
-            $this.focus(function()
+            }
+            ).focus(function()
             {
                 var val = $(this).val();
                 this.select();
                 
                 $(this).bind('blur',function()
                 {
-                    $(this).unbind("blur");
-                    $(this).unbind("keyup");
+                    $(this).unbind("blur").unbind("keyup");
                     
                     if(typeof o.onChange == "function"
                        && $(this).val() != val
@@ -81,9 +86,8 @@
                     {
                         o.onChange($(this).val());
                     }
-                });
-                
-                $this.bind('keyup',function(e)
+                }
+                ).bind('keyup',function(e)
                 {
                     if(e.keyCode == 13)
                     {
@@ -91,18 +95,13 @@
                         $(this).blur();
                     }
                 });
-            });         
-        });
-    };
-
-    // This works except I cant get access to
-    // the default options 'o'
-    $.fn.textbox.add = function(root,item)
-    {
-        var ulist = root.find("ul");
-        var anchor = $("<a>"+item+"</a>");
+            });
             
-        ulist.append($("<li />").append(anchor));
+            $.each(o.items,function(i)
+            {
+                $inp.textBoxObj.add(this);
+            });
+        });
     };
 
 })(jQuery);
