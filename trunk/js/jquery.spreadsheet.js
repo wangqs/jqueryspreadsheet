@@ -846,8 +846,9 @@
             write_formula_bar($this,$sel);
             write_button_menu($this,$sel,$.fn.toolbar);
             
-            $("#name").textbox(
-            {
+            var name = $("#name");           
+            name.textbox(
+            {                
                 onChange : function(item)
                 {
                     if($sel.state != $.fn.states.INIT)
@@ -856,7 +857,7 @@
                             + ":"+$.fn.to_b26($sel.endx+1)+""+($sel.endy+1);
                         
                         names[item] = range;
-                        $.fn.textbox.add($this.find(".textbox"),item);
+                        name[0].textBoxObj.add(item);
                         
                         if(o.setName == "function")
                             o.setName(range,item);
