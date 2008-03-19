@@ -1,16 +1,23 @@
 /**
- * jQuery.TextBox
- * Copyright (c) 2008 HyperNumbers.com
- * All rights reserved.
- * @projectDescription TextBox
- * @author Dale Harvey
- * @version 0.1
- */
+ * jQuery TextBox
+ * Version 0.1 - 18/03/2008
+ * @author Dale Harvey <harveyd@gmail.com>
+ *
+ * A combination of a text input and a drop down
+ * select box, used by
+ * http://code.google.com/p/jqueryspreadsheet/
+ *
+ **/
 
 .textbox *
 {
     padding:    0px;
     margin:     0px;
+}
+
+.textbox
+{
+    float:      left;
 }
 
 .textbox .arrow
@@ -19,7 +26,8 @@
     width:      16px;
     height:     16px;
     background: url('../img/arrow_down.png');
-    position:   absolute;
+    position:   relative;
+    top:        -18px;
 }
 
 .textbox ul
@@ -28,6 +36,7 @@
     border:     1px solid #999;
     position:   absolute;
     display:    none;
+    z-index:    9999;
 }
 
 .textbox li
