@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+        <title>JQuery.Spreadsheet UI</title>
+
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+        <script type="text/javascript" src="js/jquery.textbox.js"></script>
+        <script type="text/javascript" src="js/jquery.spreadsheet.js"></script>
+
+        <style type="text/css">
+        
+            @import "css/jquery.textbox.css";
+            @import "css/jquery.spreadsheet.css";
+
+            * { 
+                margin:         0px;
+                padding:        0px;
+                font:           11px sans-serif;            }
+
+        </style>
+
+        <script type="text/javascript">
+            $(function()
+            {
+                $("#hn").spreadsheet({fullscreen:true});
+                $("#hn").spreadsheet("setWidth","b",200);
+                $("#hn").spreadsheet("setHeight","2",30);
+                $("#hn").spreadsheet("setValue","c5","foo");
+                $("#hn").spreadsheet("setStyle","c5","font-style","italic");
+                $("#hn").spreadsheet("addName","b2:c3","newRange");
+            });
+        </script>
+
+    </head>
+
+    <body scroll="no">
+        <div id="hn"></div>
+    </body>
+
+</html>
