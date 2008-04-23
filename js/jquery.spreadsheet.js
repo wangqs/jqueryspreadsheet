@@ -11,7 +11,7 @@
     
 $.fn.spreadsheet = function(options) 
 {    
-    // Builder for the toolbar, an <a> is built for each element
+    // Builder for the toolbar, an <a> is sbuilt for each element
     // the callback is called on click and is given info
     // on the current selection                    
     $.fn.toolbar = [
@@ -29,7 +29,7 @@ $.fn.spreadsheet = function(options)
         
     $.fn.spreadsheet.defaults = 
     {
-        range: "a1:z100",   // Default Range that is loaded
+        range: "a1:z50",   // Default Range that is loaded
         fmargin: 0,         // Footer Margin
         cellSelect:null,    // Callback on a cell being selected
         cellChange:null,    // Callback for a cell Changing
@@ -88,7 +88,7 @@ $.fn.spreadsheet = function(options)
     {
         var cell    = cell_div($sel.tbl,$sel.x,$sel.y);
         var val     = $(cell).text();
-        var formula = $this.find("#formula input");
+        var formula = $this.find("#formula");
 
         $(cell).empty();
 
@@ -115,19 +115,15 @@ $.fn.spreadsheet = function(options)
 
         }).blur(function()
         {
-            if(edit_mode  != $.fn.modes.FORMULA_EDIT)
-            {
-                var newval = $(this).val();
-                $(this).parent().empty().text(newval);
+            var newval = $(this).val();
+            $(this).parent().empty().text(newval);
             
-                if(val != newval && typeof opts.cellChange == "function")
-                    opts.cellChange($sel.x,$sel.y+1,newval); 
+            if(val != newval && typeof opts.cellChange == "function" && edit_mode != $.fn.modes.FORMULA_EDIT)
+                opts.cellChange($sel.x,$sel.y+1,newval); 
 
-                edit_mode  = $.fn.modes.NOT_EDITING;
-            }
         }).appendTo(cell).width(cell.width()).height(cell.height()).focus();
 
-         edit_mode = $.fn.modes.CELL_EDIT;
+        edit_mode = $.fn.modes.CELL_EDIT;
     };
 
     /**
@@ -182,26 +178,29 @@ $.fn.spreadsheet = function(options)
      */  
     var write_formula_bar = function(root,$sel)
     {
-        root.prepend("<div class=\"clearfix\">"
+        root.prepend("<div class=\"clearfix formulabar\">"
             +"<input type=\"text\" id=\"name\" />"
-            +"<button id=\"functions\">f(x)</button>"
-            +"<div id=\"formula\"><input type=\"text\" /></div></div>");
+            +"<input type=\"button\" id=\"functions\" value=\"f(x)\" />"
+            +"<input type=\"text\" id=\"formula\"/></div>");
+    
+        var p = root.find(".formulabar");
+        $("#formula").width(p.width() - 300);
+            
+        var initval = "";
 
         var change = function(x,y,val)
         {
             edit_mode = $.fn.modes.NOT_EDITING;
-
-            if(typeof opts.cellChange == "function")
+            
+            if(typeof opts.cellChange == "function" && initval != val) 
                  opts.cellChange(x,y,val);            
         }
 
-        $("#formula input").click(function(e)
-        {
-            $(this).focus();
-        }
-        ).mousedown(function(e)
+        $("#formula").mousedown(function(e)
         {
             edit_mode = $.fn.modes.FORMULA_EDIT;
+            $(this).focus().addClass("focus");
+            initval = $(this).val();
         }
         ).keyup(function (e)
         {
@@ -216,16 +215,20 @@ $.fn.spreadsheet = function(options)
                 }
                 else
                 {
-                    var cell = cell($sel.tbl,$sel.x,$sel.y);
+                    var c = cell($sel.tbl,$sel.x,$sel.y);
             
-                    if(cell.size() > 0)
-                        cell.children("div").text($(this).val());
+                    if(c.size() > 0)
+                    {
+                        c.children("div").text($(this).val());
+                    }
                 }
             }
         }
         ).blur(function (e)
         {
+            $(this).removeClass("focus");
             change($sel.x,$sel.y+1,$(this).val());
+            initval = "";
         });  
     };
     
@@ -282,16 +285,18 @@ $.fn.spreadsheet = function(options)
         var x = root.children("div.container").children("div.ssinner");
         var y = x.children("div.datacontainer").children("div.datainner");
                         
-        x.children("table").find("tr th").width(width);
-        y.children("table").find("tr td").width(width);
+        x.find("table").find("tr th").width(width);
+        y.find("table").find("tr td").width(width);
+        y.find("table").find("tr td").children("div").width(width-6);
 
-        x.width(total_width);
+        //x.width("500px");
         y.width(total_width);               
     
         x.children("div.datacontainer").scroll(function (e) 
         {
-            x.children("table").css("left","-"+e.target.scrollLeft+"px"); 
-            root.children("div.container").children("div.rows").css("top","-"+e.target.scrollTop+"px");
+            var top = parseInt("-"+e.target.scrollTop);// + root.children("div.container").offset().top;
+            x.find("table").css("left","-"+e.target.scrollLeft+"px"); 
+            root.find("div.container").find("div.rows").css("top",top+"px");
         });
     
         $(window).resize(function()
@@ -302,11 +307,12 @@ $.fn.spreadsheet = function(options)
                 : $(root).height() - (x.offset().top - root.offset().top) - 21;                
                                 
             var height = h - fmargin;
-            var width = $(root).width() - 25;
+            var width = $(root).width()-25;
     
             root.children("div.container").children("div.rows").height(height);
             c.height(height);
             c.width(width);
+            $(".colwrap").width(width);
                 
             root.find("#marker").height(height-15);
         });
@@ -336,7 +342,7 @@ $.fn.spreadsheet = function(options)
         var x = root.children("div.container").children("div.ssinner");
         var y = x.children("div.datacontainer").children("div.datainner");
             
-        var headers = x.children("table").find("tr th");
+        var headers = x.find("table").find("tr th");
         var header,newwidth;
         var resize = false;
             
@@ -370,7 +376,9 @@ $.fn.spreadsheet = function(options)
     
                 if(width > 1)
                 {
-                    x.width(x.width() + ((width - header.width())));
+                    var total = x.width() + ((width - header.width()));
+                    x.width(total);
+                                    
                     header.width(width);
                     marker.css("left",(e.clientX)+"px");
                     newwidth = width;
@@ -424,7 +432,7 @@ $.fn.spreadsheet = function(options)
     
         rows.mousemove(function(e)
         {
-            var x = (e.clientY - top);
+            var x = (e.clientY - top) + document.documentElement.scrollTop;
     
             if(resize)
             {
@@ -435,9 +443,10 @@ $.fn.spreadsheet = function(options)
     
             else
             {
-                rows.css("cursor",
-                    (x - ($(this).offset().top - top) > $(this).height() - 5) 
-                    ? "row-resize" : "");
+                var off = $(this).offset().top - document.documentElement.scrollTop;
+                var cursor = (x - (off - top) > $(this).height() - 5)
+                    ? "row-resize" : "";
+                rows.css("cursor",cursor);
             }
         });
     
@@ -483,9 +492,9 @@ $.fn.spreadsheet = function(options)
         for(var z = 1; z < rows+1; z++)
             ind.find("table").append("<tr><td><div>"+z+"</div></td></tr>");
 
-            
         var cont = $("<div class=\"ssinner\" />").appendTo(home);
-        var tr = $("<tr />").appendTo($("<table class=\"columns\" />").appendTo(cont));
+        var t = $("<div class=\"colwrap\"><table class=\"columns\" /></div>").appendTo(cont);
+        var tr = $("<tr />").appendTo(t.find("table"));
             
         // Setup Table Headers (a,b,c,d,e ....)
         for(var n = 1; n < cols+1; n++) 
@@ -541,7 +550,7 @@ $.fn.spreadsheet = function(options)
                 this.range = $();
     
             // Little blue formula drag handler
-            this.drag.div = $("<div id=\"drag\" />").appendTo(this.tbl);
+            this.drag.div = $("<div id=\"drag\" />").insertAfter(this.tbl);
             this.drag.div.bind("mouseover",function(e)
             {
                 e.preventDefault();
@@ -550,6 +559,7 @@ $.fn.spreadsheet = function(options)
                 
             this.drag.div.bind("mousedown",function() 
             {
+                document.onselectstart=new Function ("return false");
                 $this.state = $.fn.states.DRAG;
                 $this.blurcell();
                 return false;
@@ -563,28 +573,39 @@ $.fn.spreadsheet = function(options)
          */               
         this.add_events = function($this)
         {
+            var cell = "div:not(#drag)";
+        
             this.tbl.bind('mousedown',function(e) 
-            {
-                if( leftclick(e.button) && !e.shiftKey && $(e.target).is("div:not(#drag)"))
+            {   
+                if($("#formula").hasClass("focus"))
+                {
+                    $("#formula").blur();
+                }
+                
+                if( leftclick(e.button) && !e.shiftKey && $(e.target).is(cell))
                 {
                     $this.start($.fn.addr.CELL,e.target);
+                    document.onselectstart=new Function ("return false");
+                    e.preventDefault();
                     return false;
                 }
                 return true;
         
             }).bind('mouseover',function(e) 
             { 
-                if($(e.target).is("div:not(#drag)"))
+                if($(e.target).is(cell))
                 {
                     $this.hover(e.target);
+                    e.preventDefault();
                     return false;
                 }
                 return true;
         
             }).bind('mouseup',function(e) 
             { 
-                if( leftclick(e.button) && $(e.target).is("div:not(#drag)"))
+                if( leftclick(e.button) && $(e.target).is(cell))
                 {
+                    document.onselectstart=new Function ("return true");
                     if(e.shiftKey)
                     {
                          $this.state = $.fn.states.SELECT;
@@ -699,7 +720,7 @@ $.fn.spreadsheet = function(options)
 
                     this.range = this.tbl.find("tr:lt("+(this.endy+1)+"):gt("+(this.starty-1) + ")").find("td:lt("+(this.endx+1)+"):gt("+(this.startx-1)+")").children("div");
                     this.rows_highlight = c.children("div.rows").children("table").find("tr td:lt("+(this.endy+2)+"):gt("+(this.starty)+")");
-                    this.cols_highlight = c.children("div.ssinner").children("table").find("tr th:lt("+(this.endx+1)+"):gt("+(this.startx-1)+")");
+                    this.cols_highlight = c.children("div.ssinner").children("div > table").find("tr th:lt("+(this.endx+1)+"):gt("+(this.startx-1)+")");
 
                     this.show_selection();
                 }
@@ -771,12 +792,14 @@ $.fn.spreadsheet = function(options)
   
                 // Hide of displayed above the table
                 if(off.top+c.height() < this.tbl.parent().parent().offset().top)
+                {
                     this.drag.div.css("display","none");
-                    
+                }   
                 else
                 {
+                    var f = document.documentElement.scrollTop;
                     this.drag.div.css("left",(off.left+c.width()-3)+"px");
-                    this.drag.div.css("top", (off.top+c.height())+"px");
+                    this.drag.div.css("top", (off.top+c.height()-f)+"px");
                     this.drag.div.css("display","block");
                 }
             }
@@ -829,11 +852,11 @@ $.fn.spreadsheet = function(options)
     
     var addName = function(tb,names,range,item)
     {
-        names[item] = range;
-        tb.textbox("add",item);
-        
-        if(opts.setName == "function")
-            opts.setName(range,item);
+        if(typeof names[item] == "undefined")
+        {
+            names[item] = range;
+            tb.textbox("add",item);
+        }
     }
     
    /**
@@ -867,9 +890,10 @@ $.fn.spreadsheet = function(options)
     
         var total = y.width() + (newwidth - td.width());
         y.width(total);
-        x.width(total);
+        $(".columns").width(total);
             
-        td.width(newwidth);
+        td.width(newwidth).children();
+        td.children("div").width(newwidth-4);
         td.find("textarea").width(newwidth-4);
     };
     
@@ -893,6 +917,11 @@ $.fn.spreadsheet = function(options)
         if(typeof data == "undefined")
         {
             $.data(this,"spreadsheet",{});
+        
+            if(opts.fullscreen)
+            {
+                $("body").css("overflow","hidden");
+            }
             
             var $this = $(this);
             var range = $.fn.parse_cell(opts.range.split(":")[1]);
@@ -906,7 +935,10 @@ $.fn.spreadsheet = function(options)
                 
             write_formula_bar($this,$sel);
             write_button_menu($this,$sel,$.fn.toolbar);
-                
+            resize_columns($this,$sel);
+            resize_rows($this,$sel);
+            set_display_values($this,range[0],opts.fmargin);
+                            
             $("#name").textbox(
             {                
                 onChange : function(item)
@@ -917,6 +949,9 @@ $.fn.spreadsheet = function(options)
                             + ":"+$.fn.to_b26($sel.endx+1)+""+($sel.endy+1);
                             
                         addName($("#name"),names,range,item);
+    
+                        if(typeof opts.setName == "function")
+                            opts.setName(range,item);
                     }   
                 },
                 onSelect : function(item)
@@ -932,11 +967,18 @@ $.fn.spreadsheet = function(options)
                     $sel.end(e);
                 }
             });
-                
-            resize_columns($this,$sel);
-            resize_rows($this,$sel);
-            set_display_values($this,range[0],opts.fmargin);
             
+            
+            // bit ugly, safari renders 
+            // too fast and misplaces stuff 
+            // everywhere
+            var fun = function()
+            {
+                $(window).resize();
+            };
+            
+            window.setTimeout(fun,300);
+                            
             $.data(this,"spreadsheet",{names:names});
         }
         // The plugin has already been created on this object
@@ -972,6 +1014,7 @@ $.fn.spreadsheet = function(options)
  */  
 $.fn.cell_index = function(cell)
 {
+    var off = $.browser.msie ? 1 : 0;
     return [cell.parentNode.cellIndex,
         cell.parentNode.parentNode.rowIndex];
 }
