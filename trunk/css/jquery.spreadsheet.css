@@ -112,6 +112,12 @@
     border-top:     1px solid #ddd;
 }
 
+.formulabar
+{
+    height:         20px;
+    overflow:       hidden;
+}
+
 .ss_root #formula
 {
     font:           12px "Helvetica Neue", Palatino, sans-serif;
