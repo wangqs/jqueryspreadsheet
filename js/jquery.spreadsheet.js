@@ -182,9 +182,6 @@ $.fn.spreadsheet = function(options)
             +"<input type=\"text\" id=\"name\" />"
             +"<input type=\"button\" id=\"functions\" value=\"f(x)\" />"
             +"<input type=\"text\" id=\"formula\"/></div>");
-    
-        var p = root.find(".formulabar");
-        $("#formula").width(p.width() - 300);
             
         var initval = "";
 
@@ -287,10 +284,10 @@ $.fn.spreadsheet = function(options)
                         
         x.find("table").find("tr th").width(width);
         y.find("table").find("tr td").width(width);
-        y.find("table").find("tr td").children("div").width(width-6);
+        y.find("table").find("tr td").children("div").width(width-2);
 
-        //x.width("500px");
         y.width(total_width);               
+        $(".colwrap").width(total_width+cols);
     
         x.children("div.datacontainer").scroll(function (e) 
         {
@@ -301,19 +298,20 @@ $.fn.spreadsheet = function(options)
     
         $(window).resize(function()
         {
-            var c =  x.children("div.datacontainer");     
+            var p = root.find(".formulabar");
+            $("#formula").width(p.width() - 300);
+            var c =  x.children("div.datacontainer");  
+            
+            var width = $(root).width()-25;
+            c.width(width);
+               
             var h = (opts.fullscreen)
                 ? $(window).height() - c.offset().top
                 : $(root).height() - (x.offset().top - root.offset().top) - 21;                
                                 
             var height = h - fmargin;
-            var width = $(root).width()-25;
-    
             root.children("div.container").children("div.rows").height(height);
             c.height(height);
-            c.width(width);
-            $(".colwrap").width(width);
-                
             root.find("#marker").height(height-15);
         });
     
