@@ -9,6 +9,7 @@
 
         <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
         <script type="text/javascript" src="js/jquery.textbox.js"></script>
+        <script type="text/javascript" src="js/jquery.tableresizer.js"></script>
         <script type="text/javascript" src="js/jquery.spreadsheet.js"></script>
 
         <style type="text/css">
@@ -43,7 +44,7 @@
                 width:          600px;
                 margin:         0px auto;                  }
                 
-            .ss_root { height: 400px; }
+            .spreadsheet { height: 400px; }
 
         </style>
 
@@ -52,7 +53,7 @@
             {
                 $("#hn").spreadsheet();
                 $("#hn").spreadsheet("setWidth","b",200);
-                $("#hn").spreadsheet("setHeight","2",30);
+                //$("#hn").spreadsheet("setHeight","2",30);
                 $("#hn").spreadsheet("setValue","c5","foo");
                 $("#hn").spreadsheet("setStyle","c5","font-style","italic");
                 $("#hn").spreadsheet("addName","b2:c3","newRange");
