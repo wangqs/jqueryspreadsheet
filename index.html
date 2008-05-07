@@ -7,7 +7,10 @@
 
         <title>JQuery.Spreadsheet UI</title>
 
-        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script src="js/ui.base.js"></script>
+        <script src="js/ui.draggable.js"></script>
+
         <script type="text/javascript" src="js/jquery.textbox.js"></script>
         <script type="text/javascript" src="js/jquery.tableresizer.js"></script>
         <script type="text/javascript" src="js/jquery.spreadsheet.js"></script>
@@ -53,10 +56,15 @@
             {
                 $("#hn").spreadsheet();
                 $("#hn").spreadsheet("setWidth","b",200);
-                //$("#hn").spreadsheet("setHeight","2",30);
+                $("#hn").spreadsheet("setHeight","2",30);
                 $("#hn").spreadsheet("setValue","c5","foo");
                 $("#hn").spreadsheet("setStyle","c5","font-style","italic");
                 $("#hn").spreadsheet("addName","b2:c3","newRange");
+                $("#hn").spreadsheet("addFunction","MATHS","ABS","=ABS(number)");
+                $("#hn").spreadsheet("addFunction","MATHS","ACOS","=ACOS(number)");
+                $("#hn").spreadsheet("addFunction","MATHS","ASIN","=ASIN(number)");
+                $("#hn").spreadsheet("addFunction","LOGICAL","AND","=AND(value1,value2,...)");
+                $("#hn").spreadsheet("addFunction","LOGICAL","FALSE","=FALSE()");
             });
         </script>
 
@@ -92,7 +100,8 @@ $(function()
     $("#hn").spreadsheet("setHeight","2",30);
     $("#hn").spreadsheet("setValue","c5","foo");
     $("#hn").spreadsheet("setStyle","c5","font-style","italic");
-    $("#hn").spreadsheet("addName","b2:c3","newRange");   
+    $("#hn").spreadsheet("addName","b2:c3","newRange");
+    $("#hn").spreadsheet("addFunction","MATHS","ABS","=ABS(number)");
 });
             </pre>
             
